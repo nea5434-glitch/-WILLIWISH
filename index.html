@@ -6,40 +6,83 @@
   <title>로또 번호 5게임 추천기</title>
 
   <style>
+    :root {
+      --bg-color: #f5f7fb;
+      --container-bg: white;
+      --text-main: #222;
+      --text-sub: #555;
+      --primary-color: #2563eb;
+      --primary-hover: #1d4ed8;
+      --game-bg: #f9fafb;
+      --game-border: #e5e7eb;
+      --game-title: #374151;
+      --ball-bg: #facc15;
+      --ball-text: #111;
+      --message-text: #666;
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #1a1a1a;
+      --container-bg: #2d2d2d;
+      --text-main: #f0f0f0;
+      --text-sub: #ccc;
+      --primary-color: #3b82f6;
+      --primary-hover: #60a5fa;
+      --game-bg: #3d3d3d;
+      --game-border: #4a4a4a;
+      --game-title: #e5e7eb;
+      --ball-bg: #fbbf24;
+      --ball-text: #000;
+      --message-text: #aaa;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f5f7fb;
-      color: #222;
+      background: var(--bg-color);
+      color: var(--text-main);
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
     }
 
     .container {
       width: 90%;
       max-width: 700px;
       padding: 40px 30px;
-      background: white;
+      background: var(--container-bg);
       border-radius: 20px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
       text-align: center;
+      position: relative;
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 0;
     }
 
     h1 {
       margin-bottom: 10px;
-      color: #2563eb;
+      color: var(--primary-color);
     }
 
     p {
-      color: #555;
+      color: var(--text-sub);
       margin-bottom: 30px;
     }
 
-    button {
+    button.generate-btn {
       padding: 14px 24px;
-      background: #2563eb;
+      background: var(--primary-color);
       color: white;
       border: none;
       border-radius: 10px;
@@ -48,8 +91,8 @@
       cursor: pointer;
     }
 
-    button:hover {
-      background: #1d4ed8;
+    button.generate-btn:hover {
+      background: var(--primary-hover);
     }
 
     .games {
@@ -61,15 +104,15 @@
 
     .game {
       padding: 16px;
-      background: #f9fafb;
+      background: var(--game-bg);
       border-radius: 14px;
-      border: 1px solid #e5e7eb;
+      border: 1px solid var(--game-border);
     }
 
     .game-title {
       font-weight: bold;
       margin-bottom: 12px;
-      color: #374151;
+      color: var(--game-title);
     }
 
     .numbers {
@@ -83,36 +126,60 @@
       width: 44px;
       height: 44px;
       border-radius: 50%;
-      background: #facc15;
+      background: var(--ball-bg);
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: bold;
       font-size: 17px;
-      color: #111;
+      color: var(--ball-text);
       box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     }
 
     .message {
       margin-top: 20px;
       font-size: 14px;
-      color: #666;
+      color: var(--message-text);
     }
   </style>
 </head>
 
 <body>
   <div class="container">
+    <button class="theme-toggle" onclick="toggleTheme()" id="theme-toggle">☀️</button>
     <h1>로또 번호 5게임 추천기</h1>
     <p>버튼을 누르면 로또 번호 5게임이 한 번에 추천됩니다.</p>
 
-    <button onclick="generateFiveGames()">5게임 추천받기</button>
+    <button class="generate-btn" onclick="generateFiveGames()">5게임 추천받기</button>
 
     <div class="games" id="games"></div>
     <div class="message" id="message"></div>
   </div>
 
   <script>
+    // Theme logic
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      updateToggleIcon(savedTheme);
+    }
+
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateToggleIcon(newTheme);
+    }
+
+    function updateToggleIcon(theme) {
+      const btn = document.getElementById('theme-toggle');
+      btn.textContent = theme === 'dark' ? '🌙' : '☀️';
+    }
+
+    initTheme();
+
     function generateOneGame() {
       const lottoNumbers = [];
 
