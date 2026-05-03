@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>로또 번호 5게임 추천기</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #222;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 700px;
+      padding: 40px 30px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      color: #2563eb;
+    }
+
+    p {
+      color: #555;
+      margin-bottom: 30px;
+    }
+
+    button {
+      padding: 14px 24px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    .games {
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .game {
+      padding: 16px;
+      background: #f9fafb;
+      border-radius: 14px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .game-title {
+      font-weight: bold;
+      margin-bottom: 12px;
+      color: #374151;
+    }
+
+    .numbers {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .ball {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #facc15;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 17px;
+      color: #111;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    .message {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>로또 번호 5게임 추천기</h1>
+    <p>버튼을 누르면 로또 번호 5게임이 한 번에 추천됩니다.</p>
+
+    <button onclick="generateFiveGames()">5게임 추천받기</button>
+
+    <div class="games" id="games"></div>
+    <div class="message" id="message"></div>
+  </div>
+
+  <script>
+    function generateOneGame() {
+      const lottoNumbers = [];
+
+      while (lottoNumbers.length < 6) {
+        const randomNumber = Math.floor(Math.random() * 45) + 1;
+
+        if (!lottoNumbers.includes(randomNumber)) {
+          lottoNumbers.push(randomNumber);
+        }
+      }
+
+      lottoNumbers.sort((a, b) => a - b);
+
+      return lottoNumbers;
+    }
+
+    function generateFiveGames() {
+      const gamesDiv = document.getElementById("games");
+      const messageDiv = document.getElementById("message");
+
+      gamesDiv.innerHTML = "";
+
+      for (let i = 1; i <= 5; i++) {
+        const numbers = generateOneGame();
+
+        const gameDiv = document.createElement("div");
+        gameDiv.className = "game";
+
+        const title = document.createElement("div");
+        title.className = "game-title";
+        title.textContent = i + "게임";
+
+        const numbersDiv = document.createElement("div");
+        numbersDiv.className = "numbers";
+
+        numbers.forEach(number => {
+          const ball = document.createElement("div");
+          ball.className = "ball";
+          ball.textContent = number;
+          numbersDiv.appendChild(ball);
+        });
+
+        gameDiv.appendChild(title);
+        gameDiv.appendChild(numbersDiv);
+        gamesDiv.appendChild(gameDiv);
+      }
+
+      messageDiv.textContent = "행운을 빕니다!";
+    }
+  </script>
+</body>
+</html>
